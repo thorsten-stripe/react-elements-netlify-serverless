@@ -1,13 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './index.css';
 import App from './App';
+import Success from './Success';
 import * as serviceWorker from './serviceWorker';
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { CartProvider } from 'use-shopping-cart';
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Elements stripe={stripePromise}>
+    <CartProvider stripe={stripePromise} currency="USD">
+      <Router>
+        <header>
+          <Link to="/">Serverless Shopping Cart & Mobile Payments</Link>
+        </header>
+
+        <Switch>
+          <Route path="/success">
+            <Success />
+          </Route>
+          <Route path="/">
+            <App />
+          </Route>
+        </Switch>
+      </Router>
+      <footer>
+        <p>
+          Based on an{' '}
+          <a href="https://www.learnwithjason.dev/add-apple-pay-google-pay-to-jamstack-sites">
+            episode of <em>Learn With Jason</em>
+          </a>{' '}
+          ·<a href="#EGGHEAD-link">watch the video course</a> ·
+          <a href="#TKTK-tutorial-link">read the tutorial</a> ·
+          <a href="https://github.com/stripe-samples/checkout-netlify-serverless">
+            source code
+          </a>
+        </p>
+      </footer>
+    </CartProvider>
+  </Elements>,
   document.getElementById('root')
 );
 

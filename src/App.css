@@ -1,38 +1,76 @@
-.App {
+body {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  margin: 0;
+}
+
+header {
+  background: teal;
+  padding: 1rem 5vw;
+}
+
+header a {
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+main {
+  margin: 4rem auto 6rem;
+  max-width: 650px;
+  width: 90vw;
+}
+
+footer {
+  color: #444;
+  font-size: 0.875rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+footer a {
+  color: inherit;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.products {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 3rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.product img {
+  max-width: 100%;
+}
+
+.product form {
+  align-items: baseline;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 70px 50px 1fr;
+}
+
+.product input {
+  border: 1px solid teal;
+  border-radius: 0.25rem;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  padding: 0.25rem;
+}
+
+button {
+  background: teal;
+  border: none;
+  border-radius: 0.25rem;
   color: white;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.25rem;
+  padding: 0.25rem;
+  margin: 0.25rem;
+  display: block;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button:disabled {
+  opacity: 0.5;
 }
