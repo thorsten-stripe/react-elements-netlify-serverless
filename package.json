@@ -13,7 +13,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "stripe": "^8.49.0",
-    "use-shopping-cart": "^1.1.4"
+    "use-shopping-cart": "^1.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
