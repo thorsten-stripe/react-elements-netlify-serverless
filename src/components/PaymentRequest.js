@@ -12,68 +12,67 @@ const PaymentRequest = () => {
   const { cartItems, cartDetails, cartCount } = useShoppingCart();
   const stripe = useStripe();
   const [paymentRequest, setPaymentRequest] = useState(null);
-  const [clientSecret, setClientSecret] = useState(null);
 
-  const handleButtonClicked = async (event) => {
+  const handleButtonClicked = (event) => {
     if (!cartCount) {
       event.preventDefault();
       alert('Cart is empty!');
       return;
     }
-    if (clientSecret) {
-      // As the payment amount might have changed we need to unsubscribe
-      // the listener until we have a new client-secret.
+    paymentRequest.on('paymentmethod', handlePaymentMethodReceived);
+    paymentRequest.on('cancel', () => {
       paymentRequest.off('paymentmethod');
-    }
-    // Create PaymentIntent
+    });
+    return;
+  };
+
+  const handlePaymentMethodReceived = async (event) => {
+    // Send the cart details and payment details to our function.
+    const paymentDetails = {
+      payment_method: event.paymentMethod.id,
+      shipping: {
+        name: event.shippingAddress.recipient,
+        phone: event.shippingAddress.phone,
+        address: {
+          line1: event.shippingAddress.addressLine[0],
+          city: event.shippingAddress.city,
+          postal_code: event.shippingAddress.postalCode,
+          state: event.shippingAddress.region,
+          country: event.shippingAddress.country,
+        },
+      },
+    };
     const response = await fetch('/.netlify/functions/create-payment-intent', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(cartDetails),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setClientSecret(response.clientSecret);
-  };
-
-  const handlePaymentMethodReceived = async (event) => {
-    // Confirm the PaymentIntent with the payment method returned from the payment request.
-    const { error } = await stripe.confirmCardPayment(
-      clientSecret,
-      {
-        payment_method: event.paymentMethod.id,
-        shipping: {
-          name: event.shippingAddress.recipient,
-          phone: event.shippingAddress.phone,
-          address: {
-            line1: event.shippingAddress.addressLine[0],
-            city: event.shippingAddress.city,
-            postal_code: event.shippingAddress.postalCode,
-            state: event.shippingAddress.region,
-            country: event.shippingAddress.country,
-          },
-        },
-      },
-      { handleActions: false }
-    );
-    if (error) {
+      body: JSON.stringify({ cartDetails, paymentDetails }),
+    }).then((res) => {
+      return res.json();
+    });
+    if (response.error) {
       // Report to the browser that the payment failed.
-      console.log(error);
+      console.log(response.error);
       event.complete('fail');
     } else {
       // Report to the browser that the confirmation was successful, prompting
       // it to close the browser payment method collection interface.
       event.complete('success');
       // Let Stripe.js handle the rest of the payment flow, including 3D Secure if needed.
-      const { paymentIntent } = await stripe.confirmCardPayment(clientSecret);
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        response.paymentIntent.client_secret
+      );
+      if (error) {
+        console.log(error);
+        return;
+      }
       if (paymentIntent.status === 'succeeded') {
         history.push('/success');
+      } else {
+        console.warn(
+          `Unexpected status: ${paymentIntent.status} for ${paymentIntent}`
+        );
       }
     }
   };
@@ -121,12 +120,12 @@ const PaymentRequest = () => {
     }
   }, [cartItems]);
 
-  useEffect(() => {
-    if (clientSecret) {
-      // The client-secret is set, we can now subscribe the listener.
-      paymentRequest.on('paymentmethod', handlePaymentMethodReceived);
-    }
-  }, [clientSecret]);
+  // useEffect(() => {
+  //   if (clientSecret) {
+  //     // The client-secret is set, we can now subscribe the listener.
+  //     paymentRequest.on('paymentmethod', handlePaymentMethodReceived);
+  //   }
+  // }, [clientSecret]);
 
   if (paymentRequest) {
     return (

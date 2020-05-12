@@ -23,7 +23,7 @@ const inventory = require('./data/products.json');
 
 exports.handler = async (event) => {
   try {
-    const cartItems = JSON.parse(event.body);
+    const { cartDetails: cartItems, paymentDetails } = JSON.parse(event.body);
 
     const line_items = validateCartItems(inventory, cartItems);
     const amount = line_items.reduce(
@@ -34,6 +34,8 @@ exports.handler = async (event) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: 'usd',
+      ...paymentDetails,
+      confirm: true,
       // We are using the metadata to track which items were purchased.
       // We can access this meatadata in our webhook handler to then handle
       // the fulfillment process.
@@ -50,14 +52,14 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ clientSecret: paymentIntent.client_secret }),
+      body: JSON.stringify({ paymentIntent }),
     };
   } catch (error) {
     console.log({ error });
 
     return {
       statusCode: 400,
-      body: JSON.stringify(error),
+      body: JSON.stringify({ error }),
     };
   }
 };
