@@ -9,7 +9,7 @@ import {
 
 const PaymentRequest = () => {
   const history = useHistory();
-  const { cartItems, cartDetails, cartCount } = useShoppingCart();
+  const { totalPrice, cartDetails, cartCount } = useShoppingCart();
   const stripe = useStripe();
   const [paymentRequest, setPaymentRequest] = useState(null);
 
@@ -84,7 +84,7 @@ const PaymentRequest = () => {
         currency: 'usd',
         total: {
           label: 'Demo total',
-          amount: cartItems.reduce((sum, { price }) => sum + price, 350),
+          amount: totalPrice + 350,
           pending: true,
         },
         requestPayerName: true,
@@ -106,26 +106,19 @@ const PaymentRequest = () => {
         }
       });
     }
-  }, [stripe]);
+  }, [stripe, paymentRequest, totalPrice]);
 
   useEffect(() => {
     if (paymentRequest) {
       paymentRequest.update({
         total: {
           label: 'Demo total',
-          amount: cartItems.reduce((sum, { price }) => sum + price, 350),
+          amount: totalPrice + 350,
           pending: false,
         },
       });
     }
-  }, [cartItems]);
-
-  // useEffect(() => {
-  //   if (clientSecret) {
-  //     // The client-secret is set, we can now subscribe the listener.
-  //     paymentRequest.on('paymentmethod', handlePaymentMethodReceived);
-  //   }
-  // }, [clientSecret]);
+  }, [totalPrice, paymentRequest]);
 
   if (paymentRequest) {
     return (

@@ -4,7 +4,7 @@ import products from '../data/products.json';
 import { useShoppingCart, formatCurrencyString } from 'use-shopping-cart';
 
 const Products = () => {
-  const { addItem, removeCartItem } = useShoppingCart();
+  const { addItem, removeItem } = useShoppingCart();
 
   return (
     <section className="products">
@@ -19,7 +19,7 @@ const Products = () => {
             })}
           </p>
           <button onClick={() => addItem(product)}>Add to cart</button>
-          <button onClick={() => removeCartItem(product.sku)}>Remove</button>
+          <button onClick={() => removeItem(product.sku)}>Remove</button>
         </div>
       ))}
     </section>

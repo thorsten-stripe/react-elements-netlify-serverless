@@ -14,7 +14,7 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 ReactDOM.render(
   <Elements stripe={stripePromise}>
-    <CartProvider stripe={stripePromise} currency="USD">
+    <CartProvider mode="checkout-session" stripe={stripePromise} currency="USD">
       <Router>
         <header>
           <Link to="/">Serverless Shopping Cart & Mobile Payments</Link>

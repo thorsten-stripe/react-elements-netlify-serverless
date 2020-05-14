@@ -7,9 +7,9 @@ const CartSummary = () => {
   const [loading, setLoading] = useState(false);
   const {
     totalPrice,
+    formattedTotalPrice,
     cartCount,
     clearCart,
-    cartItems,
     cartDetails,
     redirectToCheckout,
   } = useShoppingCart();
@@ -44,12 +44,12 @@ const CartSummary = () => {
       <h2>Cart summary</h2>
       {/* This is where we'll render our cart */}
       <p>Number of Items: {cartCount}</p>
-      <p>Subtotal: {totalPrice()}</p>
+      <p>Subtotal: {formattedTotalPrice}</p>
       <p>Shipping: {formatCurrencyString({ value: 350, currency: 'USD' })}</p>
       <p>
         Total:{' '}
         {formatCurrencyString({
-          value: cartItems.reduce((acc, { price }) => acc + price, 350),
+          value: totalPrice + 350,
           currency: 'USD',
         })}
       </p>
