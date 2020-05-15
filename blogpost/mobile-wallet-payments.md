@@ -1,8 +1,8 @@
 # Faster Checkout with Digital Wallet Payments
 
-Modern browser APIs, like the Payment Request API, allow you to access payment credentials stored in your customer's digital wallets like Apple Pay, Google Pay, or even Chrome.
+Modern browser APIs, like the [Payment Request API](https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API), allow you to access payment credentials stored in your customer's digital wallets like Apple Pay, Google Pay, or even Chrome.
 
-Stripe provides a Payment Request button element that securely tokenizes these stored credentials for a convenient checkout experience on mobile devices.
+Stripe provides a [Payment Request Button Element](https://stripe.com/docs/stripe-js/elements/payment-request-button#react) that securely tokenizes these stored credentials for a convenient checkout experience on mobile devices.
 
 - [Demo](#TODO)
 - [Source code on GitHub](https://github.com/stripe-samples/react-elements-netlify-serverless)
