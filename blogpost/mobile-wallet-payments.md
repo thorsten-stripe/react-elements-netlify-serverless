@@ -4,9 +4,9 @@ Modern browser APIs, like the [Payment Request API](https://developer.mozilla.or
 
 Stripe provides a [Payment Request Button Element](https://stripe.com/docs/stripe-js/elements/payment-request-button#react) that securely tokenizes these stored credentials for a convenient checkout experience on mobile devices.
 
-- [Demo](#TODO)
+- [Demo](https://react-elements-netlify-serverless.netlify.com)
 - [Source code on GitHub](https://github.com/stripe-samples/react-elements-netlify-serverless)
-- [Watch the LearnWithJason episode](https://youtu.be/6QywSwLO6rY)
+- [Watch the LearnWithJason episode](https://www.learnwithjason.dev/add-apple-pay-google-pay-to-jamstack-sites)
 
 ## Set up a new React project
 
